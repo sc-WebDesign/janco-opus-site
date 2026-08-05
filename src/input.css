@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@theme {
+  /* Identity preserved exactly from the original build, read out of the old
+     stylesheet: Rokkitt for display, Maven Pro for body. */
+  --font-display: "Hepta Slab", ui-serif, Georgia, serif;
+  --font-body: "Cabin", ui-sans-serif, system-ui, sans-serif;
+
+  /* Original palette, unchanged. The retrofit changed what it carries:
+     photographs of real barbering instead of CSS drawings, and copy that sells
+     instead of pasted review text. */
+  --color-brand-50: #f4f7f6;
+  --color-brand-100: #e6eeec;
+  --color-brand-200: #ccdad7;
+  --color-brand-300: #a4bab6;
+  --color-brand-400: #74938e;
+  --color-brand-500: #567673;
+  --color-brand-600: #435e5c;
+  --color-brand-700: #394e4c;
+  --color-brand-800: #2f403f;
+  --color-brand-900: #1f2c2b;
+  --color-brand-950: #121c1c;
+
+  --color-accent-50: #fdf5f0;
+  --color-accent-100: #fbe9dd;
+  --color-accent-200: #f5d0b8;
+  --color-accent-300: #edaf88;
+  --color-accent-400: #e28556;
+  --color-accent-500: #d96633;
+  --color-accent-600: #c14e21;
+  --color-accent-700: #a03d1d;
+  --color-accent-800: #82331d;
+  --color-accent-900: #6b2d1c;
+  --color-accent-950: #3a150c;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    @apply bg-brand-50 text-brand-950 antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight;
+  }
+  img { @apply block max-w-full; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent-700 px-7 py-3.5 text-base font-bold text-white shadow-lg shadow-brand-950/15 transition hover:bg-accent-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-accent-200;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/70 px-7 py-3.5 text-base font-bold text-white transition hover:border-white hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/40;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-brand-300 bg-white px-7 py-3.5 text-base font-bold text-brand-900 transition hover:border-accent-500 hover:text-accent-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-100;
+  }
+  .section-eyebrow {
+    @apply mb-3 inline-block text-xs font-bold uppercase tracking-[0.26em] text-accent-700;
+  }
+
+  /* ---- Photography. The barbers research shows this trade runs on shots of
+     actual cuts and the shop itself, with no illustration. The two CSS
+     drawings this build used to carry, a barber's chair and a pair of
+     scissors, are gone: a photograph of real shears beats a drawing of them. ---- */
+  .hero-shot {
+    @apply relative isolate overflow-hidden;
+    min-height: 34rem;
+  }
+  .hero-shot img {
+    @apply absolute inset-0 h-full w-full object-cover;
+    z-index: -2;
+    /* Slight upward bias keeps the customer's face out of the very bottom of
+       the crop on short viewports. */
+    object-position: center 50%;
+  }
+  /* A deep scrim so display type stays legible over any photograph. QA
+     measures the rendered text against the scrim, not against the image. */
+  .hero-scrim {
+    @apply absolute inset-0;
+    z-index: -1;
+    background: linear-gradient(100deg, rgba(18,28,28,0.92) 0%, rgba(18,28,28,0.82) 45%, rgba(18,28,28,0.55) 100%);
+  }
+  .photo-frame {
+    @apply overflow-hidden rounded-2xl border border-brand-200 bg-brand-100 shadow-sm;
+  }
+  .photo-frame img { @apply h-full w-full object-cover; }
+
+  .svc-card {
+    @apply overflow-hidden rounded-2xl border border-brand-200 bg-white shadow-sm;
+  }
+  .svc-card img { @apply h-56 w-full object-cover; }
+  .svc-body { @apply p-7; }
+
+  /* The Rated-on-Google band. Standing rule: aggregate rating only, never a
+     review count, and never review text pasted into copy. */
+  .rated-band { @apply rounded-2xl bg-accent-700 px-8 py-9 text-white; }
+  /* A real drawn star. The first pass used rounded squares, which is
+     precisely the lazy-icon problem this rebuild exists to remove. */
+  .star { @apply inline-block h-6 w-6; fill: var(--color-accent-200); }
+
+  .note { @apply rounded-2xl border border-accent-300 bg-accent-50 p-6; }
+  .faq-item { @apply border-b border-brand-200; }
+
+  .js-reveal {
+    @apply translate-y-4 opacity-0;
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .js-reveal.in { @apply translate-y-0 opacity-100; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js-reveal { @apply translate-y-0 opacity-100; transition: none; }
+}
+
+@layer base {
+  /* In-page anchors must clear the sticky header, or jumping to a section
+     lands with its heading hidden underneath. */
+  section[id] { scroll-margin-top: 5rem; }
+}
